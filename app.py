@@ -35,13 +35,21 @@ def home():
     print("server received a request for 'Home' page")
     return "Surfs Up!"
 
+all_precipitation=[]
 @app.route("/api/v1.0/precipitation")
 def prcp():
     result_prcp=sesion.query(Measurement.date, Measurement.prcp)
     precpitation={}
-    result_prcp["date"]= date
-    result_prcp["prcp"]= prcp
+    for x in result_prcp:
+        precpitation["date"]= date
+        precipitation["prcp"]= prcp
+        all_precipitation.append(precipitatoin)
+    return jsonify(all_precipitation)
     
+
+
+
+
 
 
 
