@@ -38,6 +38,7 @@ def home():
             f"/api/v1.0/precipitation<br/>"
             f"/api/v1.0/stations<br/>"
             f"/api/v1.0/tobs"
+            f"/api/v1.0/<start>/<end>"
             )
 
 #convert  query results to a dict using 'date' as the key & 'prcp' as the value
@@ -67,9 +68,26 @@ def stations():
     all_stations= list(np.ravel(result_station))
     return jsonify(all_stations)
 
-#query the dates 
-#Return a JSON list of temps observed for the previous year.
+#Query the dates & temprature observations of the most active station for the last year of data.
+#Return a JSON list of temperature observations (TOBS) for the previous year.
+
 @app.route("/api/v1.0/tobs")
+def tobs():
+    sel=[Measurement.station, Measurement.date, Measurement.tobs]
+    results=session.query(*sel).filter(Measurement.date>=2017,8,23)\
+    .filter(Measurement.station==most_active_station).all()
+
+    most_active=[]
+    for station, date, tobs in results:
+        most_active_station={}
+        most_active_station["station"]= station
+        most_active_station["date"]= date
+        most_active_station["tobs"]= tobs
+        most_active.append(most_active_station)
+
+@
+
+
 
 
 if __name__=='__main__':
