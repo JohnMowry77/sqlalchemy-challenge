@@ -51,3 +51,9 @@ def prcp():
 if __name__=='__main__':
     app.run(debug=True)
 
+@app.route("/api/v1.0/stations")
+def stations():
+    result_station=session.query(Station.station).all()
+    session.close()
+    all_stations=list(np.ravel(result_station))
+    return jsonfiy(all_stations)
