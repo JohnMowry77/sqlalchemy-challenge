@@ -28,6 +28,8 @@ app = Flask(__name__)
 #################################################
 # Flask Routes
 #################################################
+# Home Page
+# List all routes that are available
 @app.route("/")
 def home():
     print("server received a request for 'Home' page")
@@ -38,6 +40,7 @@ def home():
             f"/api/v1.0/tobs"
             )
 
+#convert  query results to a dict using 'date' as the key & 'prcp' as the value
 
 #create a dict from the row data and append to a list all_precipitation
 #note you were asked to convert the dict to a json, no list needed. 
@@ -55,7 +58,7 @@ def prcp():
     return jsonify(all_precipitation)
     #return jsonify(result_prep)
 
-
+#Return the JSON list of stations from the dataset.
 @app.route("/api/v1.0/stations")
 def stations():
     result_station=session.query(Station.station).all()
@@ -64,6 +67,7 @@ def stations():
     all_stations= list(np.ravel(result_station))
     return jsonify(all_stations)
 
+#query the dates 
 #Return a JSON list of temps observed for the previous year.
 @app.route("/api/v1.0/tobs")
 
