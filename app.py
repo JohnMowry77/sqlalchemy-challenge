@@ -41,15 +41,11 @@ def prcp():
     result_prcp=session.query(Measurement.date, Measurement.prcp).all()
     
     precpitation={}
-    for x in result_prcp:
+    for date,prcp in result_prcp:
         precpitation["date"]= date
-        precipitation["prcp"]= prcp
-        all_precipitation.append(precipitation)
+        precpitation["prcp"]= prcp
+        all_precipitation.append(precpitation)
     return jsonify(all_precipitation)
-
-
-
-
 
 
 if __name__=='__main__':
