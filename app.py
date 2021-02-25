@@ -38,7 +38,7 @@ def home():
 all_precipitation=[]
 @app.route("/api/v1.0/precipitation")
 def prcp():
-    result_prcp=session.query(Measurement.date, Measurement.prcp)
+    result_prcp=session.query(Measurement.date, Measurement.prcp).all()
     
     precpitation={}
     for x in result_prcp:
