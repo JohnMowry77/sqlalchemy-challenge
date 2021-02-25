@@ -31,7 +31,12 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     print("server received a request for 'Home' page")
-    return "Surfs Up!"
+    return (f"Surfs Up!"
+            f"Available Routes:<br/>"
+            f"/api/v1.0/precipitation<br/>"
+            f"/api/v1.0/stations<br/>"
+            f"/api/v1.0/tobs"
+            )
 
 
 #create a dict from the row data and append to a list all_precipitation
@@ -58,6 +63,8 @@ def stations():
     #convert list of tuples into normal lsit
     all_stations= list(np.ravel(result_station))
     return jsonify(all_stations)
+
+
 
 
 
