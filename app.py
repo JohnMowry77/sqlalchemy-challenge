@@ -18,7 +18,7 @@ Base.prepare(engine, reflect=True)
 # Save reference to the table
 Measurement=Base.classes.measurement
 Station=Base.classes.station
-
+#create session (link) from Python to the DB
 session=Session(engine)
 #################################################
 # Flask Setup
@@ -34,7 +34,8 @@ def home():
     return "Surfs Up!"
 
 
-
+#create a dict from the row data and append to a list all_precipitation
+#note you were asked to convert the dict to a json, no list needed. 
 all_precipitation=[]
 @app.route("/api/v1.0/precipitation")
 def prcp():
@@ -45,15 +46,20 @@ def prcp():
         precpitation["date"]= date
         precpitation["prcp"]= prcp
         all_precipitation.append(precpitation)
+        #precpitation[date]=prcp
     return jsonify(all_precipitation)
+    #return jsonify(result_prep)
 
-
-if __name__=='__main__':
-    app.run(debug=True)
 
 @app.route("/api/v1.0/stations")
 def stations():
     result_station=session.query(Station.station).all()
-    session.close()
-    all_stations=list(np.ravel(result_station))
-    return jsonfiy(all_stations)
+    #session.close()
+    #convert list of tuples into normal lsit
+    all_stations= list(np.ravel(result_station))
+    return jsonify(all_stations)
+
+
+
+if __name__=='__main__':
+    app.run(debug=True)
