@@ -64,8 +64,8 @@ def stations():
     all_stations= list(np.ravel(result_station))
     return jsonify(all_stations)
 
-
-
+#Return a JSON list of temps observed for the previous year.
+@app.route("/api/v1.0/tobs")
 
 
 if __name__=='__main__':
