@@ -10,7 +10,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///hawii.sqlite")
+engine = create_engine("sqlite:///Resources/hawii.sqlite")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -18,7 +18,7 @@ Base = automap_base()
 Base.prepare(engine, reflect=True)
 
 # Save reference to the table
-Measurement = Base.classes.measurement
+#Measurement=Base.classes.measurement
 Station=Base.classes.station
 
 #################################################
@@ -43,9 +43,9 @@ def prcp():
     for x in result_prcp:
         precpitation["date"]= date
         precipitation["prcp"]= prcp
-        all_precipitation.append(precipitatoin)
+        all_precipitation.append(precipitation)
     return jsonify(all_precipitation)
-    
+
 
 
 
