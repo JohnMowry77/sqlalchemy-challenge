@@ -38,6 +38,7 @@ def home():
             f"/api/v1.0/precipitation<br/>"
             f"/api/v1.0/stations<br/>"
             f"/api/v1.0/tobs"
+            f"/api/v1.0/<start>"
             f"/api/v1.0/<start>/<end>"
             )
 
@@ -85,8 +86,16 @@ def tobs():
         most_active_station["tobs"]= tobs
         most_active.append(most_active_station)
 
-@
+#Return a JSON list of the min temp, avg temp, max temp for a given start or start-end range.
+#When given the start only, calculate 'TMIN', 'TAVG', & 'TMAX' for all dates >= to the start date.
 
+
+@app.route("/api/v1.0/<start>")
+
+
+
+
+#When given the start & the end date, calculate the 'TMIN', 'TAVG', & 'TMAX' for dates between the start & end date inclusive.
 
 
 
