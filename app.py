@@ -47,19 +47,20 @@ def home():
 
 #create a dict from the row data and append to a list all_precipitation
 #note you were asked to convert the dict to a json, no list needed. 
-all_precipitation=[]
+
 @app.route("/api/v1.0/precipitation")
 def prcp():
     result_prcp=session.query(Measurement.date, Measurement.prcp).all()
+    all_precipitation=[]
     
-    precpitation={}
     for date,prcp in result_prcp:
-        precpitation["date"]= date
-        precpitation["prcp"]= prcp
-        all_precipitation.append(precpitation)
+        precipitation={}
+        precipitation["date"]= date
+        precipitation["prcp"]= prcp
+        all_precipitation.append(precipitation)
         #precpitation[date]=prcp
     return jsonify(all_precipitation)
-    #return jsonify(result_prep)
+    #return jsonify(precipitation)
 
 #Return the JSON list of stations from the dataset.
 @app.route("/api/v1.0/stations")
