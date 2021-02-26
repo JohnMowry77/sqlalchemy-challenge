@@ -20,7 +20,7 @@ Base.prepare(engine, reflect=True)
 Measurement=Base.classes.measurement
 Station=Base.classes.station
 #create session (link) from Python to the DB
-session=Session(engine)
+
 #################################################
 # Flask Setup
 #################################################
@@ -33,6 +33,7 @@ app = Flask(__name__)
 # List all routes that are available
 @app.route("/")
 def home():
+    session=Session(engine)
     print("server received a request for 'Home' page")
     return (f"Surfs Up!"
             f"Available Routes:<br/>"
@@ -42,6 +43,7 @@ def home():
             f"/api/v1.0/<start><br/>"
             f"/api/v1.0/<start>/<end>"
             )
+    session.close()
 
 #convert  query results to a dict using 'date' as the key & 'prcp' as the value
 
@@ -50,6 +52,7 @@ def home():
 
 @app.route("/api/v1.0/precipitation")
 def prcp():
+    session=Session(engine)
     result_prcp=session.query(Measurement.date, Measurement.prcp).all()
     all_precipitation=[]
     
@@ -59,16 +62,19 @@ def prcp():
         precipitation["prcp"]= prcp
         all_precipitation.append(precipitation)
         #precpitation[date]=prcp
+    session.close()
     return jsonify(all_precipitation)
     #return jsonify(precipitation)
 
 #Return the JSON list of stations from the dataset.
 @app.route("/api/v1.0/stations")
 def stations():
+    session=Session(engine)
     result_station=session.query(Station.station).all()
     #session.close()
     #convert list of tuples into normal lsit
     all_stations= list(np.ravel(result_station))
+    session.close()
     return jsonify(all_stations)
 
 #Query the dates & temprature observations of the most active station for the last year of data.
@@ -81,6 +87,8 @@ def tobs():
     # measurement_count=session.query(Measurement.station,func.count(Measurement.date))\
     # .group_by(Measurement.station)\
     # .order_by(func.count(Measurement.date).desc()).all()
+    session=Session(engine)
+
 
     most_active_station = "USC00519281"
     prev_year = dt.date(2017,8,23) - dt.timedelta(days=365)
@@ -97,6 +105,7 @@ def tobs():
     #     most_active_stations["tobs"]= tobs
     #     most_active.append(most_active_stations)
     most_active = list(np.ravel(results))
+    session.close()
     return jsonify(most_active)
     
 #Return a JSON list of the min temp, avg temp, max temp for a given start or start-end range.
@@ -106,6 +115,8 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def start():
  #Date input format = 8-5-17 ISO
+    session=Session(engine)
+
     start_date=datetime.strptime(start, "%Y-%m-%d").date()
 
     temp_calc= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
@@ -124,10 +135,11 @@ def start():
     {"The average temperature for this date was": avg_temp},\
     {"The maximum temperature for this date was": max_temp}]
     temp_data.append(temp_dict)
+    session.close()
 
     return jsonify(temp_data)
 
-    session.close()
+    
 #When given the start & the end date, calculate the 'TMIN', 'TAVG', & 'TMAX' for dates between the start & end date inclusive.
 
 #  temp_calc= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
