@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 import datetime as dt
 
+
 from flask import Flask, jsonify
 #################################################
 # Database Setup
@@ -117,15 +118,14 @@ def tobs():
 # def stats(start=None, end=None):
 
 @app.route("/api/v1.0/<start>")
-@app.route("/api/v1.0/temp/<start>/<end>")
-def stats(start_date=None, end_date=None):
+def start(start):
  #Date input format = 8-5-17 ISO
     session=Session(engine)
     
-    start_date=datetime.strptime(start_date, "%Y-%m-%d").date()
+    #date=datetime.strptime(start, "%Y-%m-%d").date()
 
     temp_calc= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-        filter(Measurement.date >= start_date).all()
+        filter(Measurement.date >= start).all()
 
     results_temp= list(np.ravel(temp_calc))
 
@@ -135,9 +135,9 @@ def stats(start_date=None, end_date=None):
 
     temp_data=[]
     #Create a list of dictionaries & append to empty list temp_data
-    temp_dict= [{"Start Date": start_date},\
-    {"The minimum temperature for this date was": min_temp},\
-    {"The average temperature for this date was": avg_temp},\
+    temp_dict= [{"Start Date": start},
+    {"The minimum temperature for this date was": min_temp},
+    {"The average temperature for this date was": avg_temp},
     {"The maximum temperature for this date was": max_temp}]
     temp_data.append(temp_dict)
     session.close()
@@ -146,6 +146,38 @@ def stats(start_date=None, end_date=None):
 
     
 #When given the start & the end date, calculate the 'TMIN', 'TAVG', & 'TMAX' for dates between the start & end date inclusive.
+
+@app.route("/api/v1.0/temp/<start>/<end>")
+def end(start,end):
+ #Date input format = 8-5-17 ISO
+    session=Session(engine)
+    
+    #start_date=datetime.strptime(start, "%Y-%m-%d").date()
+
+    trip_calcs= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start).filter(Measurement.date<=end).all()
+
+    trip_result= list(np.ravel(trip_calcs))
+
+    min_temp_trip= trip_result[0]
+    avg_temp_trip= trip_result[1]
+    max_temp_trip= trip_result[2]
+
+    trip_data=[]
+    #Create a list of dictionaries & append to empty list temp_data
+    trip_dict= [{"Start Date": start},
+    {"End Date": end},
+    {"The minimum temperature for this date was": min_temp_trip},
+    {"The average temperature for this date was": avg_temp_trip},
+    {"The maximum temperature for this date was": max_temp_trip}]
+    trip_data.append(trip_dict)
+    session.close()
+
+    return jsonify(trip_data)
+
+
+
+
 
 #  temp_calc= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
 #         filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
