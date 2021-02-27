@@ -166,10 +166,11 @@ def end(start,end):
     trip_data=[]
     #Create a list of dictionaries & append to empty list temp_data
     trip_dict= [{"Start Date": start},
-    {"End Date": end},
+    
     {"The minimum temperature for this date was": min_temp_trip},
     {"The average temperature for this date was": avg_temp_trip},
-    {"The maximum temperature for this date was": max_temp_trip}]
+    {"The maximum temperature for this date was": max_temp_trip},
+    {"End Date": end}]
     trip_data.append(trip_dict)
     session.close()
 
