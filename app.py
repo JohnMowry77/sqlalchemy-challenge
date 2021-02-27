@@ -162,6 +162,7 @@ def end(start,end):
     min_temp_trip= trip_result[0]
     avg_temp_trip= trip_result[1]
     max_temp_trip= trip_result[2]
+    #Trip date 2016-1-1 end date 2017-1-1 # 1 Year in Hawaii!!!
 
     trip_data=[]
     #Create a list of dictionaries & append to empty list temp_data
