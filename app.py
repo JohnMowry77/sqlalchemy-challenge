@@ -41,8 +41,8 @@ def home():
             f"/api/v1.0/precipitation<br/>"
             f"/api/v1.0/stations<br/>"
             f"/api/v1.0/tobs<br/>"
-            #f"/api/v1.0/<start><br/>"
-            #f"/api/v1.0/<start>/<end>"
+            f"/api/v1.0/<start><br/>"
+            f"/api/v1.0/<start>/<end>"
             )
     session.close()
 
@@ -176,12 +176,6 @@ def end(start,end):
 
     return jsonify(trip_data)
 
-
-
-
-
-#  temp_calc= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-#         filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
 
 if __name__=='__main__':
     app.run(debug=True)
