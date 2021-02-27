@@ -40,8 +40,8 @@ def home():
             f"/api/v1.0/precipitation<br/>"
             f"/api/v1.0/stations<br/>"
             f"/api/v1.0/tobs<br/>"
-            f"/api/v1.0/<start><br/>"
-            f"/api/v1.0/<start>/<end>"
+            #f"/api/v1.0/<start><br/>"
+            #f"/api/v1.0/<start>/<end>"
             )
     session.close()
 
@@ -110,14 +110,19 @@ def tobs():
     
 #Return a JSON list of the min temp, avg temp, max temp for a given start or start-end range.
 #When given the start only, calculate 'TMIN', 'TAVG', & 'TMAX' for all dates >= to the start date.
+#canonicalized
 
+# @app.route(“/api/v1.0/temp/<start>“)
+# @app.route(“/api/v1.0/temp/<start>/<end>“)
+# def stats(start=None, end=None):
 
 @app.route("/api/v1.0/<start>")
-def start():
+@app.route("/api/v1.0/temp/<start>/<end>")
+def stats(start_date=None, end_date=None):
  #Date input format = 8-5-17 ISO
     session=Session(engine)
-
-    start_date=datetime.strptime(start, "%Y-%m-%d").date()
+    
+    start_date=datetime.strptime(start_date, "%Y-%m-%d").date()
 
     temp_calc= session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
         filter(Measurement.date >= start_date).all()
