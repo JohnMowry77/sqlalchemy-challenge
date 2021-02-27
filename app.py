@@ -168,7 +168,7 @@ def end(start,end):
     #Create a list of dictionaries & append to empty list temp_data
     trip_dict= [{"Start Date": start},
     
-    {"The minimum temperature for this date was": min_temp_trip},
+    {"The minimum temperature for this date was": min_temp_trip
     {"The average temperature for this date was": avg_temp_trip},
     {"The maximum temperature for this date was": max_temp_trip},
     {"End Date": end}]
