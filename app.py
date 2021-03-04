@@ -54,10 +54,15 @@ def home():
 @app.route("/api/v1.0/precipitation")
 def prcp():
     session=Session(engine)
-    result_prcp=session.query(Measurement.date, Measurement.prcp).all()
+    year_ago=dt.date(2017,8,23)-dt.timedelta(days=365)
+
+    # Perform a query to retrieve the data and precipitation scores
+    sel=[Measurement.date,Measurement.prcp]
+    results= session.query(*sel).filter(Measurement.date >= year_ago).all()
+
     all_precipitation=[]
     
-    for date,prcp in result_prcp:
+    for date,prcp in results:
         precipitation={}
         precipitation["date"]= date
         precipitation["prcp"]= prcp
@@ -168,7 +173,7 @@ def end(start,end):
     #Create a list of dictionaries & append to empty list temp_data
     trip_dict= [{"Start Date": start},
     
-    {"The minimum temperature for this date was": min_temp_trip
+    {"The minimum temperature for this date was": min_temp_trip},
     {"The average temperature for this date was": avg_temp_trip},
     {"The maximum temperature for this date was": max_temp_trip},
     {"End Date": end}]
